@@ -32,3 +32,5 @@ python UNIXbro.py
 ⌨  Команда: echo "a = int(input('Enter first number: '))\nb = int(input('Enter second number: '))\nprint('Sum:', a + b)\nprint('Difference:', a - b)\nprint('Product:', a * b)\nprint('Quotient:', a / b)" > helloworld.py; python3 helloworld.py; echo "Product: $(($(cat helloworld.py | python3 -s) * 7 * 3))"
 Выполнить команду? (y/N): 
 ```
+
+thx to deepseek xD
