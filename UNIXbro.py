@@ -6,7 +6,7 @@ from colorama import Fore, Back, Style, init
 # Инициализируем Colorama (автоматически сбрасывает цвета после вывода)
 init(autoreset=True)
 
-client = MistralClient(api_key="tQuGZnnnDS5h9xjuW6yjbNIbWpthUK1W")  # Замените на ваш ключ
+client = MistralClient(api_key="your_api_key")  # Замените на ваш ключ
 
 def generate_command(user_request: str) -> str:
     """Преобразует запрос в UNIX-команду через Mistral."""
