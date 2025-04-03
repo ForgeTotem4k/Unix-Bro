@@ -3,24 +3,26 @@ import re
 from mistralai.client import MistralClient
 from colorama import Fore, Back, Style, init
 
-# Инициализируем Colorama (автоматически сбрасывает цвета после вывода)
+# Initialize Colorama (auto-resets colors after output)
 init(autoreset=True)
 
-client = MistralClient(api_key="your_api_key")  # Замените на ваш ключ
+client = MistralClient(api_key="your_mistralai_api_here")  # Replace with your key
 
 def generate_command(user_request: str) -> str:
-    """Преобразует запрос в UNIX-команду через Mistral."""
+    """Converts user request into UNIX command using Mistral."""
     response = client.chat(
         model="mistral-small",
         messages=[{
             "role": "user",
             "content": f"""
-            Пользователь хочет: '{user_request}'. 
-            Дай ТОЛЬКО одну UNIX-команду:
-            - Без любых `, кавычек, пояснений, чистейшая команда для терминала. любое противоречие - считаеться ошибкой
-            - Примеры:
-              Запрос: "покажи файлы" → ls -l
-              Запрос: "проверь ютуб" → ping youtube.com
+            User wants: '{user_request}'. 
+            Provide ONLY ONE UNIX command:
+            - Separate multiple commands with && (AND), | (PIPE) or ; (SEQUENCE). use separate only when necessary
+            - No backticks, quotes, or explanations - pure terminal command only
+            - Any deviation will be considered an error
+            - Examples:
+              Request: "show files" → ls -l
+              Request: "check youtube" → ping youtube.com
             """
         }]
     )
@@ -36,35 +38,35 @@ def execute_command(cmd: str) -> str:
             timeout=10,
             executable="/bin/bash"
         )
-        # Зеленый цвет для успешного выполнения
-        output = result.stdout or result.stderr or f"{Fore.GREEN}✅ Команда выполнена"
+        # Green for success
+        output = result.stdout or result.stderr or f"{Fore.GREEN}✓ Command executed"
         return output
     except Exception as e:
-        # Красный цвет для ошибок
-        return f"{Fore.RED}❌ Ошибка: {e}"
+        # Red for errors
+        return f"{Fore.RED}✗ Error: {e}"
 
 def main():
-    # Яркое цветное приветствие
+    # Colorful header
     print(f"{Back.BLUE}{Fore.WHITE}🔮 UNIX-Bro by forge {Style.RESET_ALL}")
-    print(f"{Fore.CYAN}Пишите что сделать ({Fore.YELLOW}exit{Fore.CYAN} — выход){Style.RESET_ALL}")
+    print(f"{Fore.CYAN}Enter your request ({Fore.YELLOW}exit{Fore.CYAN} to quit){Style.RESET_ALL}")
     
     while True:
         user_input = input(f"\n{Fore.MAGENTA}➜ {Style.RESET_ALL}").strip()
         if user_input.lower() == "exit":
-            print(f"{Fore.YELLOW}🚪 Выход из терминала...{Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}🚪 Exiting...{Style.RESET_ALL}")
             break
         
         command = generate_command(user_input)
-        # Желтый цвет для показа команды
-        print(f"\n{Fore.YELLOW}⌨  Команда: {Fore.CYAN}{command}{Style.RESET_ALL}")
+        # Yellow for command display
+        print(f"\n{Fore.YELLOW}⌨  Command: {Fore.CYAN}{command}{Style.RESET_ALL}")
         
-        # Подтверждение с цветовым акцентом
-        confirm = input(f"{Fore.WHITE}Выполнить команду? {Style.DIM}({Fore.GREEN}y{Style.RESET_ALL}{Style.DIM}/{Fore.RED}N{Style.RESET_ALL}{Style.DIM}){Style.RESET_ALL}: ").lower()
+        # Confirmation prompt
+        confirm = input(f"{Fore.WHITE}Execute command? {Style.DIM}({Fore.GREEN}y{Style.RESET_ALL}{Style.DIM}/{Fore.RED}N{Style.RESET_ALL}{Style.DIM}){Style.RESET_ALL}: ").lower()
         if confirm == "y":
             result = execute_command(command)
-            print(result)  # Результат уже цветной
+            print(result)  # Colored output
         else:
-            print(f"{Fore.RED}❌ Отменено{Style.RESET_ALL}")
+            print(f"{Fore.RED}✗ Cancelled{Style.RESET_ALL}")
 
 if __name__ == "__main__":
     main()
