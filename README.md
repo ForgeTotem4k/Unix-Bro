@@ -1,6 +1,9 @@
 # Unix-Bro
 this tool will be very useful in two cases - 1. you are a lazy person 2. you are a newbie and just learning UNIX, so it may be problematic for you to use the console, which is an integral part of the UNIX system.
 
+# Where can i get api?
+on mistralai website, they have free plan
+
 # Requirments
 
 ```
